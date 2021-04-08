@@ -10,7 +10,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 @Module({
   imports: [
     ConfigModule.forRoot(),
-    TypeOrmModule.forRoot(),
+    TypeOrmModule.forRoot({ logging: true }),
     UsersModule
   ],
   controllers: [AppController, UsersController],
