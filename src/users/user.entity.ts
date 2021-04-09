@@ -1,3 +1,4 @@
+import { Exclude } from "class-transformer";
 import { Column, Entity, PrimaryColumn } from "typeorm";
 
 @Entity()
@@ -6,6 +7,7 @@ export class UserEntity {
     email: string;
 
     @Column()
+    @Exclude({ toPlainOnly: true })
     password: string;
 
     @Column()
@@ -16,4 +18,8 @@ export class UserEntity {
 
     @Column({ nullable: true })
     avatar?: string;
+
+    constructor(partial: Partial<UserEntity>) {
+        Object.assign(this, partial);
+    }
 }
