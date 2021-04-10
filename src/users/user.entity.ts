@@ -1,5 +1,6 @@
 import { Exclude } from "class-transformer";
 import { Column, Entity, PrimaryColumn } from "typeorm";
+import { UserRole } from "./enums/user-role.enum";
 
 @Entity()
 export class UserEntity {
@@ -18,6 +19,9 @@ export class UserEntity {
 
     @Column({ nullable: true })
     avatar?: string;
+
+    @Column({ type: 'enum', enum: UserRole, default: UserRole.SPACTATOR })
+    role: UserRole;
 
     constructor(partial: Partial<UserEntity>) {
         Object.assign(this, partial);
