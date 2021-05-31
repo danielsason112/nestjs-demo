@@ -1,5 +1,6 @@
 import { Body, ClassSerializerInterceptor, Controller, Get, NotFoundException, Param, Post, Query, UseInterceptors } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
+import { LoginCred } from './dto/login-cred.dto';
 import { UserEntity } from './user.entity';
 import { UsersService } from './users.service';
 
@@ -23,6 +24,10 @@ export class UsersController {
     @Get(':id')
     findById(@Param('id') id: string): Promise<UserEntity> {
         return this.usersService.findById(id)
+    }
 
+    @Post('login')
+    login(@Body() credentials: LoginCred): Promise<UserEntity> {
+        return this.usersService.login(credentials);
     }
 }

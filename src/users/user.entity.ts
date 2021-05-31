@@ -20,7 +20,7 @@ export class UserEntity {
     @Column({ nullable: true })
     avatar?: string;
 
-    @Column({ type: 'enum', enum: UserRole, default: UserRole.SPACTATOR })
+    @Column({ type: 'enum', enum: UserRole, default: UserRole.SPECTATOR })
     role: UserRole;
 
     constructor(partial: Partial<UserEntity>) {

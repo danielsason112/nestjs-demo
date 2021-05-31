@@ -1,10 +1,11 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserRole } from './enums/user-role.enum';
 import { UserEntity } from './user.entity';
 import * as bcrypt from 'bcrypt';
+import { LoginCred } from './dto/login-cred.dto';
 
 @Injectable()
 export class UsersService {
@@ -22,7 +23,7 @@ export class UsersService {
 
         createUserDto.password = await bcrypt.hash(createUserDto.password, this.SALT_ROUNDS);
 
-        return this.usersRepository.save({ role: UserRole.SPACTATOR, ...createUserDto });
+        return this.usersRepository.save({ role: UserRole.SPECTATOR, ...createUserDto });
     }
 
     async findById(id: string): Promise<UserEntity> {
@@ -36,5 +37,18 @@ export class UsersService {
         return this.usersRepository.find()
     }
 
+    async login(credentials: LoginCred): Promise<UserEntity> {
+        let user = await this.usersRepository.findOneOrFail(credentials.email)
+            .catch(() => {
+                throw new UnauthorizedException();
+            });
 
+        if (!await bcrypt.compare(credentials.password, user.password)) {
+            throw new UnauthorizedException();
+        }
+
+        return user;
+
+
+    }
 }
